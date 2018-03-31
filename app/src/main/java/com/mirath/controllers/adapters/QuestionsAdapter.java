@@ -11,6 +11,7 @@ import com.mirath.R;
 import com.mirath.controllers.viewHolders.ChoiceViewHolder;
 import com.mirath.controllers.viewHolders.NumberViewHolder;
 import com.mirath.controllers.viewHolders.YesNoViewHolder;
+import com.mirath.models.Answer;
 import com.mirath.models.Question;
 
 import java.util.ArrayList;
@@ -19,10 +20,17 @@ import java.util.ArrayList;
  * Created by Anas Masri on 3/30/2018.
  */
 
-public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterDelegate{
 
     private ArrayList<Question> questions;
     private Context context;
+    private AdapterDelegate adapterDelegate;
+
+    @Override
+    public void onAnswer(Answer answer, int position) {
+        questions.get(position).setAnswer(answer);
+        adapterDelegate.onAnswer(answer, position);
+    }
 
     enum QuestionType {
 
@@ -41,9 +49,10 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public QuestionsAdapter(Context context, ArrayList<Question> questionArrayList) {
+    public QuestionsAdapter(Context context, ArrayList<Question> questionArrayList, AdapterDelegate adapterDelegate) {
         this.questions = questionArrayList;
         this.context = context;
+        this.adapterDelegate = adapterDelegate;
     }
 
     @Override
@@ -59,13 +68,13 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         View view;
         if (viewType == QuestionType.CHOICE.getTypeId()) {
             view = layoutInflater.inflate(R.layout.choice_view_holder, parent, false);
-            return new ChoiceViewHolder(context, view);
+            return new ChoiceViewHolder(context, view, this);
         } else if (viewType == QuestionType.NUMBER.getTypeId()) {
             view = layoutInflater.inflate(R.layout.number_view_holder, parent, false);
-            return new NumberViewHolder(context, view);
+            return new NumberViewHolder(context, view, this);
         } else if (viewType == QuestionType.YES_NO.getTypeId()) {
             view = layoutInflater.inflate(R.layout.yes_no_view_holder, parent, false    );
-            return new YesNoViewHolder(context, view);
+            return new YesNoViewHolder(context, view, this);
         }
 
         return null;
@@ -75,11 +84,11 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof ChoiceViewHolder)
-            ((ChoiceViewHolder) holder).bind(questions.get(position));
+            ((ChoiceViewHolder) holder).bind(questions.get(position), position);
         if (holder instanceof NumberViewHolder)
-            ((NumberViewHolder) holder).bind(questions.get(position));
+            ((NumberViewHolder) holder).bind(questions.get(position), position);
         if (holder instanceof YesNoViewHolder)
-            ((YesNoViewHolder) holder).bind(questions.get(position));
+            ((YesNoViewHolder) holder).bind(questions.get(position), position);
 
     }
 

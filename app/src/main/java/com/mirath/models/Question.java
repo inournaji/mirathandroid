@@ -7,20 +7,30 @@ import java.util.ArrayList;
  */
 
 public class Question {
-    Integer id;
-    Integer type_id;
-    Integer pp;
-    Integer group_id;
-    Boolean visible;
-    String question;
-    String question_en;
-    String desc;
-    String desc_en;
-    String parent;
-    String symbol;
-    Type type;
 
-    ArrayList<Choice> choices;
+    private Integer id;
+    private Integer type_id;
+    private Integer pp;
+    private Integer group_id;
+    private Boolean visible;
+    private String question;
+    private String question_en;
+    private String desc;
+    private String desc_en;
+    private String parent;
+    private String symbol;
+    private Type type;
+    private Answer answer;
+
+    private ArrayList<Choice> choices;
+
+    public Answer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
 
     public Integer getId() {
         return id;

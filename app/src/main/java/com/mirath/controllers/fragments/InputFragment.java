@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.mirath.R;
 import com.mirath.connection.Connection;
 import com.mirath.connection.ConnectionDelegate;
@@ -24,6 +25,7 @@ import com.mirath.models.Question;
 import com.mirath.utils.GsonUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.mirath.utils.GsonUtils.QUESTIONS_INTENT_TAG;
 
@@ -83,7 +85,12 @@ public class InputFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         questionsRecyclerView.setLayoutManager(linearLayoutManager);
-        QuestionsAdapter questionsAdapter = new QuestionsAdapter(getContext(), questionArrayList);
+
+        QuestionsAdapter questionsAdapter =
+                new QuestionsAdapter(getContext(),
+                        questionArrayList,
+                        (answer, position) -> questionArrayList.get(position).setAnswer(answer));
+
         questionsRecyclerView.setAdapter(questionsAdapter);
         RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
             @Override
@@ -123,8 +130,9 @@ public class InputFragment extends Fragment {
             }
         };
 
+        JsonObject jsonObject = GsonUtils.buildSubmitBody(questionArrayList);
 
-        Connection.submitAnswers(this.getContext(), connectionDelegate);
+        Connection.submitAnswers(this.getContext(), connectionDelegate, jsonObject);
 
 
     }

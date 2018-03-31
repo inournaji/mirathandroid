@@ -1,12 +1,14 @@
 package com.mirath.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mirath.models.Answer;
 import com.mirath.models.Question;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,4 +56,29 @@ public class GsonUtils {
         return gson.toJson(answers);
     }
 
+    public static JsonObject buildSubmitBody(ArrayList<Question> questionArrayList) {
+
+        HashMap<Question, Answer> questionAnswerHashMap = new HashMap<>();
+
+        Answer defaultAnswer = new Answer();
+        defaultAnswer.setValue("0");
+
+        for (Question question : questionArrayList) {
+            if (question.getAnswer() != null)
+                questionAnswerHashMap.put(question, question.getAnswer());
+            else
+                questionAnswerHashMap.put(question, defaultAnswer);
+        }
+
+        JsonObject jsonObject = new JsonObject();
+
+        for (Question question : questionAnswerHashMap.keySet()) {
+            Answer answer = questionAnswerHashMap.get(question);
+            jsonObject.addProperty(question.getSymbol(), answer.getValue());
+        }
+        jsonObject.addProperty("Paternalcousins","0");
+
+        return jsonObject;
+
+    }
 }

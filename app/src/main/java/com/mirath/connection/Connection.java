@@ -3,6 +3,7 @@ package com.mirath.connection;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 import com.mirath.models.Answer;
 import com.mirath.models.Parser;
@@ -56,16 +57,19 @@ public class Connection {
                 });
     }
 
-    public static void submitAnswers(Context context, final ConnectionDelegate connectionDelegate) {
+    public static void submitAnswers(Context context, final ConnectionDelegate connectionDelegate, JsonObject jsonObject) {
+        Log.d("conn", "request body: " +jsonObject);
 
         Ion.with(context)
-                .load(APIEndPoints.SUBMIT_API)
+                .load("POST", APIEndPoints.SUBMIT_API)
+                .setHeader("Content-Type", "application/json")
+                .setJsonObjectBody(jsonObject)
                 .asString()
                 .withResponse()
                 .setCallback((e, result) -> {
                     if (e == null && result.getHeaders().code() == 200) {
                         try {
-                            Log.d("conn", "result gotten!");
+                            Log.d("conn", "submit result: " + result.getResult());
 
                             new Parser.ParseResultTask(new JSONArray(result.getResult()), new ConnectionDelegate() {
 
@@ -82,11 +86,15 @@ public class Connection {
                             }).execute();
 
                         } catch (JSONException e1) {
+                            Log.d("conn", "JSONException: " + result.getResult());
+
                             e1.printStackTrace();
                             connectionDelegate.onConnectionFailed();
 
                         }
                     } else {
+                        Log.d("conn", result.getResult());
+
                         connectionDelegate.onConnectionFailed();
 
                     }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class Parser {
 
-    public static ArrayList<Question> parse(JSONArray jsonArray) {
+    static ArrayList<Question> parseQuestions(JSONArray jsonArray) {
 
         ArrayList<Question> questions = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class Parser {
 
                     for (int i1 = 0; i1 < choicesJsonArray.length(); i1++) {
                         Choice choice = new Choice();
-                        JSONObject choiceJSONObject = choicesJsonArray.getJSONObject(i);
+                        JSONObject choiceJSONObject = choicesJsonArray.getJSONObject(i1);
                         int choiceId = choiceJSONObject.optInt("id");
                         String choiceText = choiceJSONObject.optString("text");
                         String choiceTextEn = choiceJSONObject.optString("text_en");
@@ -90,12 +90,32 @@ public class Parser {
         return questions;
     }
 
-    public static class ParseTask extends AsyncTask<Void, Void, ArrayList<Question>> {
+    static ArrayList<Answer> parseAnswers(JSONArray jsonArray) {
+
+        ArrayList<Answer> answers = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                if (jsonArray.get(i) instanceof JSONArray) {
+                    Answer answer = new Answer();
+                    answer.setName(jsonArray.getJSONArray(i).getString(0));
+                    answer.setValue(jsonArray.getJSONArray(i).getString(1));
+                    answers.add(answer);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return answers;
+    }
+
+    public static class ParseQuestionsTask extends AsyncTask<Void, Void, ArrayList<Question>> {
 
         ConnectionDelegate connectionDelegate;
         JSONArray jsonArray;
 
-        public ParseTask(JSONArray jsonArray, ConnectionDelegate connectionDelegate) {
+        public ParseQuestionsTask(JSONArray jsonArray, ConnectionDelegate connectionDelegate) {
             this.jsonArray = jsonArray;
             this.connectionDelegate = connectionDelegate;
         }
@@ -105,14 +125,40 @@ public class Parser {
         protected void onPostExecute(ArrayList<Question> questions) {
             super.onPostExecute(questions);
             if (!questions.isEmpty())
-                connectionDelegate.onConnectionSuccess(questions);
+                connectionDelegate.onConnectionSuccess(questions , null);
             else
                 connectionDelegate.onConnectionFailed();
         }
 
         @Override
         protected ArrayList<Question> doInBackground(Void... voids) {
-            return parse(jsonArray);
+            return parseQuestions(jsonArray);
+        }
+    }
+
+    public static class ParseResultTask extends AsyncTask<Void, Void, ArrayList<Answer>> {
+
+        ConnectionDelegate connectionDelegate;
+        JSONArray jsonArray;
+
+        public ParseResultTask(JSONArray jsonArray, ConnectionDelegate connectionDelegate) {
+            this.jsonArray = jsonArray;
+            this.connectionDelegate = connectionDelegate;
+        }
+
+
+        @Override
+        protected void onPostExecute(ArrayList<Answer> answers) {
+            super.onPostExecute(answers);
+            if (!answers.isEmpty())
+                connectionDelegate.onConnectionSuccess(null, answers);
+            else
+                connectionDelegate.onConnectionFailed();
+        }
+
+        @Override
+        protected ArrayList<Answer> doInBackground(Void... voids) {
+            return parseAnswers(jsonArray);
         }
     }
 

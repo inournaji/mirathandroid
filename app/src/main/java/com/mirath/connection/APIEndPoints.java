@@ -7,5 +7,6 @@ package com.mirath.connection;
 public class APIEndPoints {
 
     public static final String QUESTIONS_API = "http://82.137.244.25/mirath/api/web/v1/questions";
+    public static final String SUBMIT_API = "http://82.137.244.25/mirath/api/web/v1/inheritances/submit";
 
 }

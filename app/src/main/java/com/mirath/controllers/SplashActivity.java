@@ -7,40 +7,55 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mirath.R;
 import com.mirath.connection.ConnectionDelegate;
+import com.mirath.models.Answer;
 import com.mirath.models.Question;
 import com.mirath.utils.GsonUtils;
 
 import java.util.ArrayList;
 
-import static com.mirath.connection.Connection.*;
+import static com.mirath.connection.Connection.getQuestions;
+import static com.mirath.utils.GsonUtils.QUESTIONS_INTENT_TAG;
 
 public class SplashActivity extends AppCompatActivity {
-    
+    TextView tapToRetry;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        final ProgressBar progressBar = findViewById(R.id.progressBar);
-        final TextView tapToRetry = findViewById(R.id.tap_to_retry);
+        progressBar = findViewById(R.id.progressBar);
+        tapToRetry = findViewById(R.id.tap_to_retry);
+        final RelativeLayout startButton = findViewById(R.id.start_button);
 
-        progressBar.setVisibility(View.VISIBLE);
+        startButton.setOnClickListener((v) -> {
+            startButton.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            startConnection();
+        });
+
+
+    }
+
+    private void startConnection() {
 
         ConnectionDelegate connectionDelegate = new ConnectionDelegate() {
 
             @Override
-            public void onConnectionSuccess(ArrayList<Question> questions) {
+            public void onConnectionSuccess(ArrayList<Question> questions, ArrayList<Answer> answers) {
                 Log.d("conn", "onConnectionSuccess: from splash");
                 new Handler().postDelayed(() -> {
                     progressBar.setVisibility(View.INVISIBLE);
 
                     Intent goToHome = new Intent(SplashActivity.this, MainActivity.class);
 
-                    goToHome.putExtra("questions", GsonUtils.convertQuestionsToString(questions));
+                    goToHome.putExtra(QUESTIONS_INTENT_TAG, GsonUtils.convertQuestionsToString(questions));
                     startActivity(goToHome);
                     finish();
 
@@ -64,6 +79,5 @@ public class SplashActivity extends AppCompatActivity {
             tapToRetry.setVisibility(View.GONE);
             getQuestions(SplashActivity.this, connectionDelegate);
         });
-
     }
 }

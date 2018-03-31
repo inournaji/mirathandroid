@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Mirath</string>
     <string name="tap_to_retry">Tap to retry</string>
+    <string name="intro_text">الخدمة الأكثر دقة لحساب التركة حسب الشريعة الإسلامية</string>
+    <string name="start">ابدأ</string>
+    <string name="calc">احتساب</string>
+    <string name="connection_error">Connection error, try again please!</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.mirath.connection;
 
+import com.mirath.models.Answer;
 import com.mirath.models.Question;
 
 import java.util.ArrayList;
@@ -9,6 +10,6 @@ import java.util.ArrayList;
  */
 
 public interface ConnectionDelegate {
-    void onConnectionSuccess(ArrayList<Question> questions);
-    void onConnectionFailed();
+    void onConnectionSuccess(ArrayList<Question> questions, ArrayList<Answer> answers);
+     void onConnectionFailed();
 }

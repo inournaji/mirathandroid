@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
 
         final RelativeLayout arabicStartButton = findViewById(R.id.arabic_btn);
         final RelativeLayout englishStartButton = findViewById(R.id.english_btn);
-        final RelativeLayout buttonsLayout = findViewById(R.id.buttons_layout);
+        final LinearLayout buttonsLayout = findViewById(R.id.buttons_layout);
 
         arabicStartButton.setOnClickListener((v) -> {
             SharedPrefUtils.saveLanguage("ar");

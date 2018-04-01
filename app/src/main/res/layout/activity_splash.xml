@@ -39,34 +39,32 @@
         app:layout_constraintStart_toStartOf="@+id/progressBar"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/buttons_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:background="@android:color/darker_gray"
-        android:gravity="center"
         android:padding="20dp"
-        android:paddingEnd="30dp"
-        android:paddingStart="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
         <RelativeLayout
             android:id="@+id/english_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+          >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/english_start"
+                android:layout_centerInParent="true"
                 android:textColor="#0b3043"
                 android:textSize="18sp" />
         </RelativeLayout>
@@ -74,10 +72,8 @@
         <View
             android:id="@+id/divider"
             android:layout_width="1dp"
-            android:layout_height="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_toEndOf="@id/english_btn"
-            android:background="@color/colorPrimary"
+            android:layout_height="match_parent"
+             android:background="@color/colorPrimary"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             />
@@ -85,18 +81,23 @@
         <RelativeLayout
             android:id="@+id/arabic_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-             android:layout_toEndOf="@id/divider">
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+
+            android:layout_toEndOf="@id/divider">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/start"
                 android:textColor="#0b3043"
+                android:layout_centerInParent="true"
+
                 android:textSize="18sp" />
         </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tap_to_retry"

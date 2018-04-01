@@ -131,7 +131,7 @@ public class Connection {
                             }
 
                             if (result != null) {
-                                String responseCode = result.getHeaders().code() + "    ";
+                                String responseCode = result.getHeaders().code() + "";
                                 if (responseCode.equals(ErrorCodes.BAD_REQUEST.code)) {
 
                                     try {

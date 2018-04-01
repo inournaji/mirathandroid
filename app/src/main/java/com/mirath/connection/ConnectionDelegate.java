@@ -11,5 +11,5 @@ import java.util.ArrayList;
 
 public interface ConnectionDelegate {
     void onConnectionSuccess(ArrayList<Question> questions, ArrayList<Answer> answers);
-     void onConnectionFailed();
+     void onConnectionFailed(String code);
 }

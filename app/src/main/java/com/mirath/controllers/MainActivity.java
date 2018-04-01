@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentManager = getSupportFragmentManager();
+        getWindow().setBackgroundDrawableResource(R.drawable.questions_bg);
+
+         fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction().add(R.id.content_frame,
                 InputFragment.newInstance(getIntent().getStringExtra(QUESTIONS_INTENT_TAG)))

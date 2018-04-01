@@ -32,7 +32,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         adapterDelegate.onAnswer(answer, position);
     }
 
-    enum QuestionType {
+    public enum QuestionType {
 
         YES_NO(1),
         CHOICE(2),

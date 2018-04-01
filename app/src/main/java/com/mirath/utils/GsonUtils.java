@@ -64,10 +64,11 @@ public class GsonUtils {
         defaultAnswer.setValue("0");
 
         for (Question question : questionArrayList) {
-            if (question.getAnswer() != null)
-                questionAnswerHashMap.put(question, question.getAnswer());
-            else
-                questionAnswerHashMap.put(question, defaultAnswer);
+            if (!question.getSymbol().endsWith("Bool"))
+                if (question.getAnswer() != null)
+                    questionAnswerHashMap.put(question, question.getAnswer());
+                else
+                    questionAnswerHashMap.put(question, defaultAnswer.setValue(question.getDefaultAnswerValue() + ""));
         }
 
         JsonObject jsonObject = new JsonObject();
@@ -76,7 +77,6 @@ public class GsonUtils {
             Answer answer = questionAnswerHashMap.get(question);
             jsonObject.addProperty(question.getSymbol(), answer.getValue());
         }
-        jsonObject.addProperty("Paternalcousins","0");
 
         return jsonObject;
 

@@ -2,6 +2,7 @@ package com.mirath.models;
 
 import android.os.AsyncTask;
 
+import com.mirath.connection.Connection;
 import com.mirath.connection.ConnectionDelegate;
 
 import org.json.JSONArray;
@@ -40,6 +41,7 @@ public class Parser {
                     JSONObject typeJsonObject = questionJsonObject.optJSONObject("type");
                     Integer typeId = typeJsonObject.optInt("id");
                     String typeName = typeJsonObject.optString("name");
+                    int default_answer = typeJsonObject.optInt("default_answer");
 
                     questionObject.setId(id);
                     questionObject.setQuestion(question);
@@ -51,6 +53,7 @@ public class Parser {
                     questionObject.setGroup_id(group_id);
                     questionObject.setSymbol(symbol);
                     questionObject.setVisible(visible);
+                    questionObject.setDefaultAnswerValue(default_answer);
 
                     Type type = new Type();
                     type.setId(typeId);
@@ -127,7 +130,7 @@ public class Parser {
             if (!questions.isEmpty())
                 connectionDelegate.onConnectionSuccess(questions , null);
             else
-                connectionDelegate.onConnectionFailed();
+                connectionDelegate.onConnectionFailed(Connection.ErrorCodes.BAD_REQUEST.getCode());
         }
 
         @Override
@@ -153,7 +156,7 @@ public class Parser {
             if (!answers.isEmpty())
                 connectionDelegate.onConnectionSuccess(null, answers);
             else
-                connectionDelegate.onConnectionFailed();
+                connectionDelegate.onConnectionFailed(Connection.ErrorCodes.BAD_REQUEST.getCode());
         }
 
         @Override

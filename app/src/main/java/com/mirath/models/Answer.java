@@ -21,7 +21,8 @@ public class Answer {
         return value;
     }
 
-    public void setValue(String value) {
+    public Answer setValue(String value) {
         this.value = value;
+        return this;
     }
 }

@@ -25,7 +25,6 @@ import com.mirath.models.Question;
 import com.mirath.utils.GsonUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.mirath.utils.GsonUtils.QUESTIONS_INTENT_TAG;
 
@@ -124,9 +123,12 @@ public class InputFragment extends Fragment {
             }
 
             @Override
-            public void onConnectionFailed() {
-                Toast.makeText(getContext(), getString(R.string.connection_error), Toast.LENGTH_LONG).show();
+            public void onConnectionFailed(String code) {
 
+                if (code.equals(Connection.ErrorCodes.NO_CONTENT.getCode())) {
+                    Toast.makeText(getContext(), R.string.no_solution_found, Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(getContext(), code, Toast.LENGTH_LONG).show();
             }
         };
 

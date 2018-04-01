@@ -21,6 +21,7 @@ public class Question {
     private String symbol;
     private Type type;
     private Answer answer;
+    private int defaultAnswerValue;
 
     private ArrayList<Choice> choices;
 
@@ -133,4 +134,14 @@ public class Question {
     public void setChoices(ArrayList<Choice> choices) {
         this.choices = choices;
     }
+
+    public void setDefaultAnswerValue(int defaultAnswerValue) {
+        this.defaultAnswerValue = defaultAnswerValue;
+
+    }
+
+    public int getDefaultAnswerValue() {
+        return defaultAnswerValue;
+    }
 }
+

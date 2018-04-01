@@ -15,6 +15,7 @@ import com.mirath.connection.ConnectionDelegate;
 import com.mirath.models.Answer;
 import com.mirath.models.Question;
 import com.mirath.utils.GsonUtils;
+import com.mirath.utils.SharedPrefUtils;
 
 import java.util.ArrayList;
 
@@ -32,10 +33,21 @@ public class SplashActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         tapToRetry = findViewById(R.id.tap_to_retry);
-        final RelativeLayout startButton = findViewById(R.id.start_button);
 
-        startButton.setOnClickListener((v) -> {
-            startButton.setVisibility(View.GONE);
+        final RelativeLayout arabicStartButton = findViewById(R.id.arabic_btn);
+        final RelativeLayout englishStartButton = findViewById(R.id.english_btn);
+        final RelativeLayout buttonsLayout = findViewById(R.id.buttons_layout);
+
+        arabicStartButton.setOnClickListener((v) -> {
+            SharedPrefUtils.saveLanguage("ar");
+            buttonsLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            startConnection();
+        });
+
+        englishStartButton.setOnClickListener((v) -> {
+            SharedPrefUtils.saveLanguage("en");
+            buttonsLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
             startConnection();
         });
@@ -65,7 +77,7 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onConnectionFailed() {
+            public void onConnectionFailed(String code) {
                 Log.d("conn", "onConnectionFailed: from splash");
                 progressBar.setVisibility(View.INVISIBLE);
                 tapToRetry.setVisibility(View.VISIBLE);

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Mirath</string>
     <string name="tap_to_retry">Tap to retry</string>
-    <string name="intro_text">الخدمة الأكثر دقة لحساب التركة حسب الشريعة الإسلامية</string>
-    <string name="start">ابدأ</string>
+    <string name="intro_text">الخدمة الأكثر دقة لحساب التركة حسب الشريعة الإسلامية, اختر اللغة رجاءً</string>
+    <string name="start">العربية</string>
     <string name="calc">احتساب</string>
     <string name="connection_error">Connection error, try again please!</string>
+    <string name="no_solution_found">لا يوجد حل</string>
+    <string name="english_start">English</string>
 </resources>

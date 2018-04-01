@@ -5,6 +5,6 @@
     <string name="start">العربية</string>
     <string name="calc">احتساب</string>
     <string name="connection_error">Connection error, try again please!</string>
-    <string name="no_solution_found">لا يوجد حل</string>
+    <string name="no_solution_found">عذراً، لم نتمكن من حل هذه الحالة.</string>
     <string name="english_start">English</string>
 </resources>

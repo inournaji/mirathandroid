@@ -110,6 +110,8 @@ public class InputFragment extends Fragment {
 
     private void calculate() {
 
+        calculateBtn.setClickable(false);
+
         ConnectionDelegate connectionDelegate = new ConnectionDelegate() {
 
             @Override
@@ -124,8 +126,9 @@ public class InputFragment extends Fragment {
 
             @Override
             public void onConnectionFailed(String code) {
+                calculateBtn.setClickable(true);
 
-                if (code.equals(Connection.ErrorCodes.NO_CONTENT.getCode())) {
+                if (code.trim().equals(Connection.ErrorCodes.NO_CONTENT.getCode())) {
                     Toast.makeText(getContext(), R.string.no_solution_found, Toast.LENGTH_LONG).show();
                 } else
                     Toast.makeText(getContext(), code, Toast.LENGTH_LONG).show();
@@ -134,7 +137,7 @@ public class InputFragment extends Fragment {
 
         JsonObject jsonObject = GsonUtils.buildSubmitBody(questionArrayList);
 
-        Connection.submitAnswers(this.getContext(), connectionDelegate, jsonObject);
+        Connection.submitAnswers(getContext(), connectionDelegate, jsonObject);
 
 
     }

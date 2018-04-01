@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.mirath.R;
 import com.mirath.controllers.adapters.AnswersAdapter;
-import com.mirath.controllers.adapters.QuestionsAdapter;
 import com.mirath.models.Answer;
 import com.mirath.utils.GsonUtils;
 
@@ -73,7 +72,7 @@ public class ResultsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         answersRecyclerView.setLayoutManager(linearLayoutManager);
-        AnswersAdapter answersAdapter = new AnswersAdapter(answersArrayList, getContext());
+        AnswersAdapter answersAdapter = new AnswersAdapter(answersArrayList != null ? answersArrayList : new ArrayList<>(), getContext());
         answersRecyclerView.setAdapter(answersAdapter);
 
     }

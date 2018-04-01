@@ -43,7 +43,7 @@ public class YesNoViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
         if (question.getDesc() != null && !question.getDesc().isEmpty()) {
             infoIcon.setVisibility(View.VISIBLE);
-        } else infoIcon.setVisibility(View.GONE);
+        } else infoIcon.setVisibility(View.INVISIBLE);
 
 
         label.setText(question.getQuestion());

@@ -72,7 +72,10 @@ public class Connection {
 
                         }
                     } else {
+                        if(e == null)
                         connectionDelegate.onConnectionFailed(result.getHeaders().code() + "");
+                        else
+                            connectionDelegate.onConnectionFailed(400+ "");
                     }
                 });
     }

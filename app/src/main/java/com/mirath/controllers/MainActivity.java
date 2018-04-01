@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void moveToResultsFragment(String answers) {
 
-        fragmentManager.beginTransaction().add(R.id.content_frame,
-                ResultsFragment.newInstance(getIntent().getStringExtra(ANSWERS_INTENT_TAG)))
+        fragmentManager.beginTransaction().replace(R.id.content_frame,
+                ResultsFragment.newInstance(answers))
                 .commit();
 
     }

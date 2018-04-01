@@ -7,4 +7,5 @@
     <string name="connection_error">Connection error, try again please!</string>
     <string name="no_solution_found">عذراً، لم نتمكن من حل هذه الحالة.</string>
     <string name="english_start">English</string>
+    <string name="result">النتيجة</string>
 </resources>

@@ -74,6 +74,14 @@ public class InputFragment extends Fragment {
             String questions = getArguments().getString(QUESTIONS_INTENT_TAG);
             if (questions != null && !questions.isEmpty()) {
                 questionArrayList = GsonUtils.getQuestions(questions);
+
+                for(Question question:questionArrayList){
+                    if(question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId())){
+                        question.setShown(false);
+
+                    }
+
+                }
             }
         }
 
@@ -88,7 +96,10 @@ public class InputFragment extends Fragment {
         QuestionsAdapter questionsAdapter =
                 new QuestionsAdapter(getContext(),
                         questionArrayList,
-                        (answer, position) -> questionArrayList.get(position).setAnswer(answer));
+                        (answer, position) -> {
+                            questionArrayList.get(position).setAnswer(answer);
+
+                        });
 
         questionsRecyclerView.setAdapter(questionsAdapter);
         RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {

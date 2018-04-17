@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mirath.R;
@@ -26,6 +27,7 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
     private AdapterDelegate adapterDelegate;
     private Question question;
     private ImageView infoIcon;
+    private LinearLayout parentLayout;
     private Context context;
 
     public NumberViewHolder(Context context, View itemView, AdapterDelegate adapterDelegate) {
@@ -35,6 +37,7 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
         label = itemView.findViewById(R.id.label_tv);
         number = itemView.findViewById(R.id.number_et);
         infoIcon = itemView.findViewById(R.id.info_icon);
+        parentLayout = itemView.findViewById(R.id.parent_layout);
         infoIcon.setOnClickListener(this);
 
         this.adapterDelegate = adapterDelegate;
@@ -46,6 +49,16 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
     public void bind(Question question, int position) {
 
         this.question = question;
+
+        if (question.isShown()) {
+            parentLayout.setVisibility(View.VISIBLE);
+            bindDate(question, position);
+        } else {
+            parentLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void bindDate(Question question, int position) {
 
         if (question.getDesc() != null && !question.getDesc().isEmpty()) {
             infoIcon.setVisibility(View.VISIBLE);
@@ -79,6 +92,7 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
 
             }
         });
+
     }
 
     @Override

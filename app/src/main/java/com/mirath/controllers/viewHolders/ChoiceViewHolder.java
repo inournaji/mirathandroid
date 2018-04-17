@@ -48,7 +48,7 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
         }else infoIcon.setVisibility(View.INVISIBLE);
 
         label.setText(question.getQuestion());
-        //radioGroup.removeAllViews();
+
         if (radioGroup.getChildCount() == 0)
             for (Choice choice : question.getChoices()) {
 

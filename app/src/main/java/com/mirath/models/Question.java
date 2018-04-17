@@ -1,5 +1,7 @@
 package com.mirath.models;
 
+import com.mirath.controllers.adapters.QuestionsAdapter;
+
 import java.util.ArrayList;
 
 /**
@@ -25,6 +27,16 @@ public class Question {
 
     private ArrayList<Choice> choices;
 
+    private boolean isShown = true;
+
+    public boolean isShown() {
+        return isShown;
+    }
+
+    public void setShown(boolean visible) {
+        isShown = visible;
+    }
+
     public Answer getAnswer() {
         return answer;
     }
@@ -40,6 +52,7 @@ public class Question {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public Type getType() {
         return type;
     }
@@ -47,6 +60,7 @@ public class Question {
     public void setType(Type type) {
         this.type = type;
     }
+
     public Integer getType_id() {
         return type_id;
     }
@@ -142,6 +156,23 @@ public class Question {
 
     public int getDefaultAnswerValue() {
         return defaultAnswerValue;
+    }
+
+    public static boolean isYesNoCheckedQuestion(Question question) {
+        return question.getType().getId().equals(QuestionsAdapter.QuestionType.YES_NO.getTypeId()) &&
+                question.getAnswer() != null &&
+                question.getAnswer().getValue().equals("1");
+    }
+
+    public static boolean shouldShowNumberQuestion(Question question, ArrayList<String> shouldShowNumberQuestions) {
+        return question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId()) &&
+                shouldShowNumberQuestions.contains(question.getSymbol());
+    }
+
+    public boolean isMale() {
+        return answer != null && answer.getValue().equals(getSymbol().equals("Gender") &&
+                getAnswer() != null &&
+                getAnswer().getValue().equals("1"));
     }
 }
 

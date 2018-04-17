@@ -16,11 +16,14 @@ import com.mirath.models.Question;
 
 import java.util.ArrayList;
 
+import static com.mirath.models.Question.isYesNoCheckedQuestion;
+import static com.mirath.models.Question.shouldShowNumberQuestion;
+
 /**
  * Created by Anas Masri on 3/30/2018.
  */
 
-public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterDelegate{
+public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterDelegate {
 
     private ArrayList<Question> questions;
     private Context context;
@@ -30,6 +33,52 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onAnswer(Answer answer, int position) {
         questions.get(position).setAnswer(answer);
         adapterDelegate.onAnswer(answer, position);
+        checkQuestionsChanges();
+    }
+
+    ArrayList<String> shouldShowNumberQuestions = new ArrayList<>();
+
+    private void checkQuestionsChanges() {
+
+        shouldShowNumberQuestions = new ArrayList<>();
+
+        for (Question question : questions) {
+
+            if (isYesNoCheckedQuestion(question) || question.isMale()) {
+                shouldShowNumberQuestions.add(question.getSymbol().replace("Bool", ""));
+            }
+
+        }
+
+        for (Question question : questions) {
+
+            if (shouldShowNumberQuestion(question, shouldShowNumberQuestions)) {
+                question.setShown(true);
+            } else if(question.getType().getId().equals(QuestionType.NUMBER.getTypeId())){
+                question.setShown(false);
+                question.setAnswer(null);
+            }
+        }
+
+
+ /*       for (Question question : questions) {
+
+            boolean isFemale = false;
+
+            if (question.getSymbol().equals("Gender") &&
+                    question.getAnswer() != null &&
+                    question.getAnswer().getValue().equals("2")) { //is female
+                isFemale = true;
+
+            }else { //not gender question
+
+
+            }
+
+
+        }*/
+
+        notifyDataSetChanged();
     }
 
     public enum QuestionType {
@@ -73,7 +122,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             view = layoutInflater.inflate(R.layout.number_view_holder, parent, false);
             return new NumberViewHolder(context, view, this);
         } else if (viewType == QuestionType.YES_NO.getTypeId()) {
-            view = layoutInflater.inflate(R.layout.yes_no_view_holder, parent, false    );
+            view = layoutInflater.inflate(R.layout.yes_no_view_holder, parent, false);
             return new YesNoViewHolder(context, view, this);
         }
 
@@ -85,9 +134,9 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (holder instanceof ChoiceViewHolder)
             ((ChoiceViewHolder) holder).bind(questions.get(position), position);
-        if (holder instanceof NumberViewHolder)
+        else if (holder instanceof NumberViewHolder)
             ((NumberViewHolder) holder).bind(questions.get(position), position);
-        if (holder instanceof YesNoViewHolder)
+        else if (holder instanceof YesNoViewHolder)
             ((YesNoViewHolder) holder).bind(questions.get(position), position);
 
     }

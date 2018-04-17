@@ -18,8 +18,11 @@ import com.mirath.models.Question;
 import com.mirath.utils.GsonUtils;
 import com.mirath.utils.SharedPrefUtils;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
+import static com.mirath.connection.Connection.demoGetQuestions;
 import static com.mirath.connection.Connection.getQuestions;
 import static com.mirath.utils.GsonUtils.QUESTIONS_INTENT_TAG;
 
@@ -85,7 +88,12 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
 
-        getQuestions(this, connectionDelegate);
+        //getQuestions(this, connectionDelegate);
+        try {
+            demoGetQuestions(this, connectionDelegate);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         tapToRetry.setOnClickListener((View v) -> {
             progressBar.setVisibility(View.VISIBLE);

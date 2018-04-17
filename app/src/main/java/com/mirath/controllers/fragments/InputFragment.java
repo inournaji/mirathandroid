@@ -22,6 +22,7 @@ import com.mirath.controllers.MainActivity;
 import com.mirath.controllers.adapters.QuestionsAdapter;
 import com.mirath.models.Answer;
 import com.mirath.models.Question;
+import com.mirath.models.Type;
 import com.mirath.utils.GsonUtils;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class InputFragment extends Fragment {
 
     RecyclerView questionsRecyclerView;
     ArrayList<Question> questionArrayList = new ArrayList<>();
-    private RelativeLayout calculateBtn;
     MainActivity mainActivity;
+    private RelativeLayout progressBarLayout;
 
     public static InputFragment newInstance(String questionsExtra) {
 
@@ -63,7 +64,7 @@ public class InputFragment extends Fragment {
 
     private void findViews(View containerView) {
         questionsRecyclerView = containerView.findViewById(R.id.questions_recycler_view);
-        calculateBtn = containerView.findViewById(R.id.calculate_btn);
+        progressBarLayout = containerView.findViewById(R.id.progressBarLayout);
     }
 
     @Override
@@ -75,8 +76,8 @@ public class InputFragment extends Fragment {
             if (questions != null && !questions.isEmpty()) {
                 questionArrayList = GsonUtils.getQuestions(questions);
 
-                for(Question question:questionArrayList){
-                    if(question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId())){
+                for (Question question : questionArrayList) {
+                    if (question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId())) {
                         question.setShown(false);
 
                     }
@@ -93,41 +94,36 @@ public class InputFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         questionsRecyclerView.setLayoutManager(linearLayoutManager);
 
+        Question btnQuestion = new Question();
+        Type btnType = new Type();
+        btnType.setId(QuestionsAdapter.QuestionType.BUTTON.getTypeId());
+        btnType.setName("Btn");
+        btnQuestion.setType(btnType);
+        questionArrayList.add(questionArrayList.size(), btnQuestion);
+
         QuestionsAdapter questionsAdapter =
                 new QuestionsAdapter(getContext(),
                         questionArrayList,
                         (answer, position) -> {
-                            questionArrayList.get(position).setAnswer(answer);
-
+                            if (position != -100) //not submit button
+                                questionArrayList.get(position).setAnswer(answer);
+                            else calculate();
                         });
 
         questionsRecyclerView.setAdapter(questionsAdapter);
-        RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
-                int visibleItemCount = linearLayoutManager.getChildCount();
-                int totalItemCount = linearLayoutManager.getItemCount();
-                int pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-                    calculateBtn.setVisibility(View.VISIBLE);
-                } else
-                    calculateBtn.setVisibility(View.GONE);
-            }
-        };
-        questionsRecyclerView.addOnScrollListener(mScrollListener);
-        calculateBtn.setOnClickListener((v) -> calculate());
     }
 
     private void calculate() {
 
-        calculateBtn.setClickable(false);
+        progressBarLayout.setVisibility(View.VISIBLE);
 
         ConnectionDelegate connectionDelegate = new ConnectionDelegate() {
 
             @Override
             public void onConnectionSuccess(ArrayList<Question> questions, ArrayList<Answer> answers) {
                 Log.d("conn", "onConnectionSuccess: from submit");
+                progressBarLayout.setVisibility(View.GONE);
                 moveToResultsFragment(answers);
             }
 
@@ -137,8 +133,7 @@ public class InputFragment extends Fragment {
 
             @Override
             public void onConnectionFailed(String code) {
-                calculateBtn.setClickable(true);
-
+                progressBarLayout.setVisibility(View.GONE);
                 if (code.trim().equals(Connection.ErrorCodes.NO_CONTENT.getCode())) {
                     Toast.makeText(getContext(), R.string.no_solution_found, Toast.LENGTH_LONG).show();
                 } else

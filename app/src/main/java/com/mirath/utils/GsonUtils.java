@@ -3,6 +3,7 @@ package com.mirath.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.mirath.controllers.adapters.QuestionsAdapter;
 import com.mirath.models.Answer;
 import com.mirath.models.Question;
 
@@ -64,7 +65,9 @@ public class GsonUtils {
         defaultAnswer.setValue("0");
 
         for (Question question : questionArrayList) {
-            if (!question.getSymbol().endsWith("Bool"))
+
+            if (!question.getType().getId().equals(QuestionsAdapter.QuestionType.BUTTON.getTypeId()) &&
+                    !question.getSymbol().endsWith("Bool"))
                 if (question.getAnswer() != null)
                     questionAnswerHashMap.put(question, question.getAnswer());
                 else

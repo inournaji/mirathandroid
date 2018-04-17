@@ -31,9 +31,14 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onAnswer(Answer answer, int position) {
-        questions.get(position).setAnswer(answer);
+
+        if (position != -100) { //submit button click
+            questions.get(position).setAnswer(answer);
+            checkQuestionsChanges();
+        }
+
         adapterDelegate.onAnswer(answer, position);
-        checkQuestionsChanges();
+
     }
 
     ArrayList<String> shouldShowNumberQuestions = new ArrayList<>();
@@ -54,7 +59,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (shouldShowNumberQuestion(question, shouldShowNumberQuestions)) {
                 question.setShown(true);
-            } else if(question.getType().getId().equals(QuestionType.NUMBER.getTypeId())){
+            } else if (question.getType().getId().equals(QuestionType.NUMBER.getTypeId())) {
                 question.setShown(false);
                 question.setAnswer(null);
             }
@@ -85,7 +90,8 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         YES_NO(1),
         CHOICE(2),
-        NUMBER(3);
+        NUMBER(3),
+        BUTTON(4);
 
         public int getTypeId() {
             return typeId;
@@ -124,6 +130,9 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (viewType == QuestionType.YES_NO.getTypeId()) {
             view = layoutInflater.inflate(R.layout.yes_no_view_holder, parent, false);
             return new YesNoViewHolder(context, view, this);
+        } else if (viewType == QuestionType.BUTTON.getTypeId()) {
+            view = layoutInflater.inflate(R.layout.btn_view_holder, parent, false);
+            return new BtnViewHolder(context, view, this);
         }
 
         return null;

@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.mirath.R;
+import com.mirath.controllers.MainActivity;
 import com.mirath.controllers.adapters.AnswersAdapter;
 import com.mirath.models.Answer;
 import com.mirath.utils.GsonUtils;
@@ -27,6 +29,7 @@ public class ResultsFragment extends Fragment {
 
     private ArrayList<Answer> answersArrayList;
     private RecyclerView answersRecyclerView;
+    private ImageView backIv;
 
     public static ResultsFragment newInstance(String answersExtra) {
 
@@ -65,6 +68,8 @@ public class ResultsFragment extends Fragment {
 
     private void findViews(View containerView) {
         answersRecyclerView = containerView.findViewById(R.id.answers_recycler_view);
+        backIv = containerView.findViewById(R.id.back_iv);
+        backIv.setOnClickListener(v -> ((MainActivity) getActivity()).backToInputFragment());
     }
 
     private void initAnswersList() {

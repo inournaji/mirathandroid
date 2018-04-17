@@ -88,12 +88,12 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
 
-        //getQuestions(this, connectionDelegate);
-        try {
+        getQuestions(this, connectionDelegate);
+     /*   try {
             demoGetQuestions(this, connectionDelegate);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         tapToRetry.setOnClickListener((View v) -> {
             progressBar.setVisibility(View.VISIBLE);

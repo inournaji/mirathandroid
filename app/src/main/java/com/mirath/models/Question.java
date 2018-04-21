@@ -4,6 +4,8 @@ import com.mirath.controllers.adapters.QuestionsAdapter;
 
 import java.util.ArrayList;
 
+import static com.mirath.controllers.adapters.QuestionsAdapter.*;
+
 /**
  * Created by Anas Masri on 3/25/2018.
  */
@@ -158,21 +160,22 @@ public class Question {
         return defaultAnswerValue;
     }
 
-    public static boolean isYesNoCheckedQuestion(Question question) {
-        return question.getType().getId().equals(QuestionsAdapter.QuestionType.YES_NO.getTypeId()) &&
-                question.getAnswer() != null &&
-                question.getAnswer().getValue().equals("1");
+    public boolean isYesNoCheckedQuestion() {
+        return getType().getId().equals(QuestionType.YES_NO.getTypeId()) &&
+                getAnswer() != null &&
+                getAnswer().getValue().equals("1");
     }
 
-    public static boolean shouldShowNumberQuestion(Question question, ArrayList<String> shouldShowNumberQuestions) {
-        return question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId()) &&
-                shouldShowNumberQuestions.contains(question.getSymbol());
+    public boolean shouldShowNumberQuestion(ArrayList<String> shouldShowNumberQuestions) {
+        return getType().getId().equals(QuestionType.NUMBER.getTypeId()) &&
+                shouldShowNumberQuestions.contains(getSymbol());
     }
 
     public boolean isMale() {
-        return answer != null && answer.getValue().equals(getSymbol().equals("Gender") &&
+        return getSymbol() != null &&
+                getSymbol().equals("Gender") &&
                 getAnswer() != null &&
-                getAnswer().getValue().equals("1"));
+                getAnswer().getValue().equals("1");
     }
 }
 

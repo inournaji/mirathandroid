@@ -16,9 +16,6 @@ import com.mirath.models.Question;
 
 import java.util.ArrayList;
 
-import static com.mirath.models.Question.isYesNoCheckedQuestion;
-import static com.mirath.models.Question.shouldShowNumberQuestion;
-
 /**
  * Created by Anas Masri on 3/30/2018.
  */
@@ -28,6 +25,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<Question> questions;
     private Context context;
     private AdapterDelegate adapterDelegate;
+    private ArrayList<String> shouldShowNumberQuestions = new ArrayList<>();
 
     @Override
     public void onAnswer(Answer answer, int position) {
@@ -41,7 +39,6 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    ArrayList<String> shouldShowNumberQuestions = new ArrayList<>();
 
     private void checkQuestionsChanges() {
 
@@ -49,39 +46,22 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         for (Question question : questions) {
 
-            if (isYesNoCheckedQuestion(question) || question.isMale()) {
+            if (question.isYesNoCheckedQuestion())
                 shouldShowNumberQuestions.add(question.getSymbol().replace("Bool", ""));
-            }
+            else if(question.isMale())
+                shouldShowNumberQuestions.add("Wives");
 
         }
 
         for (Question question : questions) {
 
-            if (shouldShowNumberQuestion(question, shouldShowNumberQuestions)) {
+            if (question.shouldShowNumberQuestion(shouldShowNumberQuestions)) {
                 question.setShown(true);
             } else if (question.getType().getId().equals(QuestionType.NUMBER.getTypeId())) {
                 question.setShown(false);
                 question.setAnswer(null);
             }
         }
-
-
- /*       for (Question question : questions) {
-
-            boolean isFemale = false;
-
-            if (question.getSymbol().equals("Gender") &&
-                    question.getAnswer() != null &&
-                    question.getAnswer().getValue().equals("2")) { //is female
-                isFemale = true;
-
-            }else { //not gender question
-
-
-            }
-
-
-        }*/
 
         notifyDataSetChanged();
     }

@@ -77,7 +77,8 @@ public class InputFragment extends Fragment {
                 questionArrayList = GsonUtils.getQuestions(questions);
 
                 for (Question question : questionArrayList) {
-                    if (question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId())) {
+                    if (question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId()) &&
+                            question.getDefaultAnswerValue() != 1) {
                         question.setShown(false);
 
                     }

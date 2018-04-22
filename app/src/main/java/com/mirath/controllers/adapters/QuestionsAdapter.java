@@ -1,5 +1,6 @@
 package com.mirath.controllers.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -23,9 +24,10 @@ import java.util.ArrayList;
 public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterDelegate {
 
     private ArrayList<Question> questions;
-    private Context context;
+    private Activity context;
     private AdapterDelegate adapterDelegate;
     private ArrayList<String> shouldShowNumberQuestions = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     @Override
     public void onAnswer(Answer answer, int position) {
@@ -63,7 +65,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         }
 
-        notifyDataSetChanged();
+         context.runOnUiThread(() -> recyclerView.post(() -> notifyDataSetChanged()));
     }
 
     public enum QuestionType {
@@ -84,7 +86,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public QuestionsAdapter(Context context, ArrayList<Question> questionArrayList, AdapterDelegate adapterDelegate) {
+    public QuestionsAdapter(Activity context, ArrayList<Question> questionArrayList, AdapterDelegate adapterDelegate) {
         this.questions = questionArrayList;
         this.context = context;
         this.adapterDelegate = adapterDelegate;
@@ -133,5 +135,11 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return questions.size();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 }

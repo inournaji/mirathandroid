@@ -103,7 +103,7 @@ public class InputFragment extends Fragment {
         questionArrayList.add(questionArrayList.size(), btnQuestion);
 
         QuestionsAdapter questionsAdapter =
-                new QuestionsAdapter(getContext(),
+                new QuestionsAdapter(getActivity(),
                         questionArrayList,
                         (answer, position) -> {
                             if (position != -100) //not submit button

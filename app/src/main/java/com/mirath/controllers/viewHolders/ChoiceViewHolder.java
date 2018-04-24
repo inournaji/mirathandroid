@@ -2,6 +2,7 @@ package com.mirath.controllers.viewHolders;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.mirath.R;
 import com.mirath.controllers.adapters.AdapterDelegate;
+import com.mirath.controllers.adapters.ChoicesAdapter;
 import com.mirath.models.Answer;
 import com.mirath.models.Choice;
 import com.mirath.models.Question;
@@ -25,8 +27,10 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
     private TextView label;
     private ImageView infoIcon;
     private Question question;
-    private RadioGroup radioGroup;
+    private RecyclerView radioGroup;
     private AdapterDelegate adapterDelegate;
+    private boolean onBind;
+    int position;
 
     public ChoiceViewHolder(Context context, View itemView, AdapterDelegate adapterDelegate) {
         super(itemView);
@@ -36,59 +40,41 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
         infoIcon.setOnClickListener(this);
         this.adapterDelegate = adapterDelegate;
         this.context = context;
-        setIsRecyclable(false);
+         setIsRecyclable(false);
     }
 
     public void bind(Question question, int position) {
 
+        onBind = true;
+
+        this.position = position;
+
         this.question = question;
 
-        if(question.getDesc() != null && !question.getDesc().isEmpty()){
+        if (question.getDesc() != null && !question.getDesc().isEmpty()) {
             infoIcon.setVisibility(View.VISIBLE);
-        }else infoIcon.setVisibility(View.INVISIBLE);
+        } else
+            infoIcon.setVisibility(View.INVISIBLE);
 
         label.setText(question.getQuestion());
 
-        if (radioGroup.getChildCount() == 0)
-            for (Choice choice : question.getChoices()) {
+        initRecyclerView();
 
-                RadioButton radioButton = new RadioButton(context);
-                radioButton.setText(choice.getText());
-                radioButton.setTag(choice.getValue());
 
-                if (question.getAnswer() != null) {
-                    if (question.getAnswer().getValue().equals(radioButton.getTag() + "")) {
-                        radioButton.setChecked(true);
-                    }
-                }
-
-                radioGroup.addView(radioButton);
-
-                radioButton.setOnClickListener((v) -> {
-                    clearOtherChoices(radioGroup, radioButton);
-                    if (question.getAnswer() == null)
-                        question.setAnswer(new Answer());
-
-                    question.getAnswer().setValue(radioButton.getTag() + "");
-
-                    adapterDelegate.onAnswer(question.getAnswer(), position);
-
-                });
-            }
+        onBind = false;
     }
 
-    private void clearOtherChoices(RadioGroup radioGroup, RadioButton radioButton) {
+    private void initRecyclerView() {
 
-        for (int i = 0; i < radioGroup.getChildCount(); i++) {
-            View childView = radioGroup.getChildAt(i);
 
-            if (childView instanceof RadioButton) {
-                if (childView.getTag() != radioButton.getTag()) {
-                    ((RadioButton) childView).setChecked(false);
-                }
-            }
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        radioGroup.setLayoutManager(linearLayoutManager);
 
-        }
+        ChoicesAdapter choicesAdapter = new ChoicesAdapter(question.getChoices(), context, question, this);
+        radioGroup.setAdapter(choicesAdapter);
+
+
     }
 
     @Override
@@ -97,5 +83,10 @@ public class ChoiceViewHolder extends RecyclerView.ViewHolder implements View.On
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
             alertBuilder.setMessage(question.getDesc()).create().show();
         }
+    }
+
+    public  void update(){
+        adapterDelegate.onAnswer(question.getAnswer(), position);
+
     }
 }

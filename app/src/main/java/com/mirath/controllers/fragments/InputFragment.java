@@ -19,6 +19,8 @@ import com.mirath.R;
 import com.mirath.connection.Connection;
 import com.mirath.connection.ConnectionDelegate;
 import com.mirath.controllers.MainActivity;
+import com.mirath.controllers.adapters.AdapterDelegate;
+import com.mirath.controllers.adapters.FragmentDelegate;
 import com.mirath.controllers.adapters.QuestionsAdapter;
 import com.mirath.models.Answer;
 import com.mirath.models.Question;
@@ -33,12 +35,13 @@ import static com.mirath.utils.GsonUtils.QUESTIONS_INTENT_TAG;
  * Created by Anas Masri on 3/30/2018.
  */
 
-public class InputFragment extends Fragment {
+public class InputFragment extends Fragment implements FragmentDelegate {
 
     RecyclerView questionsRecyclerView;
     ArrayList<Question> questionArrayList = new ArrayList<>();
     MainActivity mainActivity;
     private RelativeLayout progressBarLayout;
+    QuestionsAdapter questionsAdapter;
 
     public static InputFragment newInstance(String questionsExtra) {
 
@@ -76,14 +79,7 @@ public class InputFragment extends Fragment {
             if (questions != null && !questions.isEmpty()) {
                 questionArrayList = GsonUtils.getQuestions(questions);
 
-                for (Question question : questionArrayList) {
-                    if (question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId()) &&
-                            question.getDefaultAnswerValue() != 1) {
-                        question.setShown(false);
 
-                    }
-
-                }
             }
         }
 
@@ -95,6 +91,15 @@ public class InputFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         questionsRecyclerView.setLayoutManager(linearLayoutManager);
 
+        for (Question question : questionArrayList) {
+            if (question.getType().getId().equals(QuestionsAdapter.QuestionType.NUMBER.getTypeId()) &&
+                    question.getDefaultAnswerValue() != 1) {
+                question.setShown(false);
+
+            }
+
+        }
+
         Question btnQuestion = new Question();
         Type btnType = new Type();
         btnType.setId(QuestionsAdapter.QuestionType.BUTTON.getTypeId());
@@ -102,14 +107,10 @@ public class InputFragment extends Fragment {
         btnQuestion.setType(btnType);
         questionArrayList.add(questionArrayList.size(), btnQuestion);
 
-        QuestionsAdapter questionsAdapter =
+        questionsAdapter =
                 new QuestionsAdapter(getActivity(),
                         questionArrayList,
-                        (answer, position) -> {
-                            if (position != -100) //not submit button
-                                questionArrayList.get(position).setAnswer(answer);
-                            else calculate();
-                        });
+                        this);
 
         questionsRecyclerView.setAdapter(questionsAdapter);
 
@@ -153,5 +154,19 @@ public class InputFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) context;
+    }
+
+
+    @Override
+    public void onDone(ArrayList<Question> questions) {
+
+        if(questions == null) //submit button
+            calculate();
+        else {
+            this.questionArrayList.clear();
+            this.questionArrayList.addAll(questions);
+            questionsAdapter.updateAdapterValues(questions);
+
+        }
     }
 }

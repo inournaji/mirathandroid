@@ -14,8 +14,6 @@ public class Question {
 
     private Integer id;
     private Integer type_id;
-    private Integer pp;
-    private Integer group_id;
     private Boolean visible;
     private String question;
     private String question_en;
@@ -71,21 +69,6 @@ public class Question {
         this.type_id = type_id;
     }
 
-    public Integer getPp() {
-        return pp;
-    }
-
-    public void setPp(Integer pp) {
-        this.pp = pp;
-    }
-
-    public Integer getGroup_id() {
-        return group_id;
-    }
-
-    public void setGroup_id(Integer group_id) {
-        this.group_id = group_id;
-    }
 
     public Boolean getVisible() {
         return visible;

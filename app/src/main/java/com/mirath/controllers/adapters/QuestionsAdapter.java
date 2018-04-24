@@ -1,7 +1,6 @@
 package com.mirath.controllers.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,39 +22,41 @@ import java.util.ArrayList;
 
 public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterDelegate {
 
+    private final FragmentDelegate fragmentDelegate;
     private ArrayList<Question> questions;
     private Activity context;
-    private AdapterDelegate adapterDelegate;
     private ArrayList<String> shouldShowNumberQuestions = new ArrayList<>();
-    private RecyclerView recyclerView;
 
     @Override
     public void onAnswer(Answer answer, int position) {
 
-        if (position != -100) { //submit button click
+        if (position != -100) {
             questions.get(position).setAnswer(answer);
-            checkQuestionsChanges();
-        }
+            fragmentDelegate.onDone(checkQuestionsChanges());
 
-        adapterDelegate.onAnswer(answer, position);
+        } else //submit button click
+            fragmentDelegate.onDone(null);
 
     }
 
 
-    private void checkQuestionsChanges() {
+    private ArrayList<Question> checkQuestionsChanges() {
 
         shouldShowNumberQuestions = new ArrayList<>();
 
-        for (Question question : questions) {
+        ArrayList<Question> newQuestions = new ArrayList<>();
+        newQuestions.addAll(questions);
+
+        for (Question question : newQuestions) {
 
             if (question.isYesNoCheckedQuestion())
                 shouldShowNumberQuestions.add(question.getSymbol().replace("Bool", ""));
-            else if(question.isMale())
+            else if (question.isMale())
                 shouldShowNumberQuestions.add("Wives");
 
         }
 
-        for (Question question : questions) {
+        for (Question question : newQuestions) {
 
             if (question.shouldShowNumberQuestion(shouldShowNumberQuestions)) {
                 question.setShown(true);
@@ -65,8 +66,18 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         }
 
-         context.runOnUiThread(() -> recyclerView.post(() -> notifyDataSetChanged()));
+        return newQuestions;
+       // updateAdapterValues(newQuestions);
+
+
     }
+
+    public void updateAdapterValues(ArrayList<Question> newQuestions) {
+        questions.clear();
+        questions.addAll(newQuestions);
+        notifyDataSetChanged();
+    }
+
 
     public enum QuestionType {
 
@@ -86,10 +97,10 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public QuestionsAdapter(Activity context, ArrayList<Question> questionArrayList, AdapterDelegate adapterDelegate) {
+    public QuestionsAdapter(Activity context, ArrayList<Question> questionArrayList, FragmentDelegate fragmentDelegate) {
         this.questions = questionArrayList;
         this.context = context;
-        this.adapterDelegate = adapterDelegate;
+        this.fragmentDelegate = fragmentDelegate;
     }
 
     @Override
@@ -137,9 +148,5 @@ public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return questions.size();
     }
 
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-    }
+
 }

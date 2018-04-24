@@ -25,19 +25,24 @@ public class YesNoViewHolder extends RecyclerView.ViewHolder implements View.OnC
     private AdapterDelegate adapterDelegate;
     private ImageView infoIcon;
     private Question question;
+    private int position;
+    private boolean onBind;
 
     public YesNoViewHolder(Context context, View itemView, AdapterDelegate adapterDelegate) {
         super(itemView);
         label = itemView.findViewById(R.id.label_tv);
         aSwitch = itemView.findViewById(R.id.switch1);
         this.adapterDelegate = adapterDelegate;
-        setIsRecyclable(false);
         infoIcon = itemView.findViewById(R.id.info_icon);
         infoIcon.setOnClickListener(this);
+        aSwitch.setOnClickListener(this);
         this.context = context;
+        setIsRecyclable(false);
     }
 
     public void bind(Question question, int position) {
+
+        onBind = true;
 
         this.question = question;
 
@@ -47,23 +52,36 @@ public class YesNoViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
 
         label.setText(question.getQuestion());
+
         if (question.getAnswer() != null)
             aSwitch.setChecked(question.getAnswer().getValue().equals("1"));
-        aSwitch.setOnClickListener((v) -> {
-            if (question.getAnswer() == null)
-                question.setAnswer(new Answer());
+        else
+            aSwitch.setChecked(false);
 
-            question.getAnswer().setValue(aSwitch.isChecked() ? "1" : "0");
+        this.position = position;
 
-            adapterDelegate.onAnswer(question.getAnswer(), position);
-        });
+        onBind = false;
+
+
     }
 
     @Override
     public void onClick(View v) {
         if (v == infoIcon) {
+
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
             alertBuilder.setMessage(question.getDesc()).create().show();
+
+        } else if (v == aSwitch) {
+
+            if (!onBind) {
+                if (question.getAnswer() == null)
+                    question.setAnswer(new Answer());
+
+                question.getAnswer().setValue(aSwitch.isChecked() ? "1" : "0");
+
+                adapterDelegate.onAnswer(question.getAnswer(), position);
+            }
         }
     }
 }

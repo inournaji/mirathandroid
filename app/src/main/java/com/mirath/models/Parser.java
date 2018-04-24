@@ -49,8 +49,7 @@ public class Parser {
                     questionObject.setDesc(desc);
                     questionObject.setDesc_en(desc_en);
                     questionObject.setType_id(type_id);
-                    questionObject.setPp(pp);
-                    questionObject.setGroup_id(group_id);
+
                     questionObject.setSymbol(symbol);
                     questionObject.setVisible(visible);
                     questionObject.setDefaultAnswerValue(default_answer);

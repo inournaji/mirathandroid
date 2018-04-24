@@ -1,11 +1,12 @@
 package com.mirath.controllers.viewHolders;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,7 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
     private LinearLayout parentLayout;
     private Context context;
 
+
     public NumberViewHolder(Context context, View itemView, AdapterDelegate adapterDelegate) {
         super(itemView);
         this.context = context;
@@ -41,9 +43,9 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
         infoIcon.setOnClickListener(this);
 
         this.adapterDelegate = adapterDelegate;
-        setIsRecyclable(false);
-       /* Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/Amiri-Regular.ttf");
-        label.setTypeface(face);*/
+       setIsRecyclable(false);
+
+
     }
 
     public void bind(Question question, int position) {
@@ -52,46 +54,41 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
 
         if (question.isShown()) {
             parentLayout.setVisibility(View.VISIBLE);
-            bindDate(question, position);
+            bindData(question, position);
+
         } else {
             parentLayout.setVisibility(View.GONE);
         }
+
     }
 
-    private void bindDate(Question question, int position) {
+    private void bindData(Question question, int position) {
 
         if (question.getDesc() != null && !question.getDesc().isEmpty()) {
             infoIcon.setVisibility(View.VISIBLE);
-        } else infoIcon.setVisibility(View.INVISIBLE);
+        } else
+            infoIcon.setVisibility(View.INVISIBLE);
 
         label.setText(question.getQuestion());
 
         if (question.getAnswer() != null) {
             number.setText(question.getAnswer().getValue());
-        }
+        }else
+            number.setText("");
 
-        number.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        number.setOnEditorActionListener((v, actionId, event) -> {
+            if ((actionId == EditorInfo.IME_ACTION_DONE ) && number.getEditableText() != null && !number.getEditableText().toString().isEmpty()) {
                 if (question.getAnswer() == null)
                     question.setAnswer(new Answer());
 
-                question.getAnswer().setValue(s.toString());
-
+                question.getAnswer().setValue(number.getEditableText().toString());
+                hideKeyboard((Activity) context);
                 adapterDelegate.onAnswer(question.getAnswer(), position);
+                return true;
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            return false;
         });
+
 
     }
 
@@ -101,5 +98,16 @@ public class NumberViewHolder extends RecyclerView.ViewHolder implements View.On
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
             alertBuilder.setMessage(question.getDesc()).create().show();
         }
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

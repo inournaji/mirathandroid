@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import static com.mirath.controllers.adapters.QuestionsAdapter.*;
 
 /**
- * Created by Anas Masri on 3/25/2018.
+ * Created Nour on 3/25/2018.
  */
 
 public class Question {

@@ -6,7 +6,7 @@ import com.mirath.models.Question;
 import java.util.ArrayList;
 
 /**
- * Created by Anas Masri on 3/25/2018.
+ * Created by Nour on 3/25/2018.
  */
 
 public interface ConnectionDelegate {

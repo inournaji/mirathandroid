@@ -14,7 +14,7 @@ import com.mirath.models.Answer;
 import java.util.ArrayList;
 
 /**
- * Created by Anas Masri on 3/31/2018.
+ * Created by Nour on 3/31/2018.
  */
 
 public class AnswersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

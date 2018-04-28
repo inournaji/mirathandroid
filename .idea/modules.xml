@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mirath.iml" filepath="$PROJECT_DIR$/mirath.iml" />
+      <module fileurl="file://F:\StudioProjects\mirathandroid\mirath.iml" filepath="F:\StudioProjects\mirathandroid\mirath.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mirathandroid.iml" filepath="$PROJECT_DIR$/mirathandroid.iml" />
     </modules>
   </component>
 </project>

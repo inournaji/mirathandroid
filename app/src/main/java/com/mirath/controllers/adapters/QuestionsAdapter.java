@@ -17,7 +17,7 @@ import com.mirath.models.Question;
 import java.util.ArrayList;
 
 /**
- * Created by Anas Masri on 3/30/2018.
+ * Created by Nour on 3/30/2018.
  */
 
 public class QuestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterDelegate {

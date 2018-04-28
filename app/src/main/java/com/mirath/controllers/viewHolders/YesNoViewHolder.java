@@ -14,7 +14,7 @@ import com.mirath.models.Answer;
 import com.mirath.models.Question;
 
 /**
- * Created by Anas Masri on 3/30/2018.
+ * Created by Nour on 3/30/2018.
  */
 
 public class YesNoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

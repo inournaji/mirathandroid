@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import static com.mirath.utils.GsonUtils.QUESTIONS_INTENT_TAG;
 
 /**
- * Created by Anas Masri on 3/30/2018.
+ * Created by Nour on 3/30/2018.
  */
 
 public class InputFragment extends Fragment implements FragmentDelegate {

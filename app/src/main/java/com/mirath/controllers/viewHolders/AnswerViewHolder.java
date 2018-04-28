@@ -8,7 +8,7 @@ import com.mirath.R;
 import com.mirath.models.Answer;
 
 /**
- * Created by Anas Masri on 3/31/2018.
+ * Created by Nour on 3/31/2018.
  */
 
 public class AnswerViewHolder extends RecyclerView.ViewHolder {
